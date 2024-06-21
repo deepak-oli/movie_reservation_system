@@ -4,8 +4,6 @@ from sqlalchemy import Column, Integer, String, Boolean, Enum, DateTime, func
 
 from app.config.db import Base
 
-
-
 class Role(enum.Enum):
     ADMIN = "ADMIN"
     MODERATOR = "MODERATOR"
