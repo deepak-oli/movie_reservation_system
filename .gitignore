@@ -164,3 +164,8 @@ cython_debug/
 # VS Code
 .vscode/
 *.code-workspace
+
+# alembic
+alembic/versions/*
+
+!alembic/versions/__init__.py
