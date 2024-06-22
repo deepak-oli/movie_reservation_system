@@ -39,7 +39,8 @@ async def send_verification_email(email: str, token: str, username: str):
         recipients=[email],
         template_body={
             "username": username,
-            "verification_link": verification_link
+            "verification_link": verification_link,
+            "token": token
         },
         subtype="html"
     )

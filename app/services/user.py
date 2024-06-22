@@ -4,6 +4,7 @@ from fastapi import HTTPException, status
 from app.schemas import user as schemas
 from app.models import user as models
 from app.utils.auth.password import get_password_hash
+from app.utils.email import confirm_verification_token
 
 # Error Messages
 EMAIL_ALREADY_REGISTERED = "Email already registered."
@@ -45,4 +46,19 @@ def create_user(db:Session, user:schemas.UserCreate):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+def verify_email(db:Session, token:str):
+    email = confirm_verification_token(token)
+    if not email:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token.")
+    
+    user = get_user_by_email(db, email)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
+    
+    user.is_active = True
+    user.is_verified = True
+    db.commit()
+    db.refresh(user)
+    return user
     

@@ -28,6 +28,8 @@ class UserResponse(BaseModel):
     username: str
     email: EmailStr
     role: str
+    is_active: bool
+    is_verified: bool
 
 class AuthUser(UserResponse):
     is_active: bool

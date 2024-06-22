@@ -41,13 +41,18 @@ class Auth(HTTPBearer):
             if not db_user:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN, detail="User not found.")
+            if db_user.is_active == False:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN, detail="User is not active.")
+            if db_user.is_verified == False:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN, detail="User is not verified.")
             request.state.user = db_user
             return db_user
         else:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN, detail="Invalid authorization code.")
         
-
     def verify_token(self, token: str) -> Optional[dict]:
         try:
             payload = decode_jwt(token)
