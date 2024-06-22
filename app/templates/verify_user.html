@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Verification</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        padding: 10px 0;
+        background-color: #4caf50;
+        color: #ffffff;
+        border-radius: 8px 8px 0 0;
+      }
+      .body {
+        padding: 20px;
+        text-align: center;
+      }
+      .body p {
+        font-size: 16px;
+        color: #333333;
+      }
+      .verify-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        font-size: 16px;
+        color: #ffffff;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+      .footer {
+        padding: 10px 0;
+        text-align: center;
+        font-size: 12px;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>Welcome to Our Service</h1>
+      </div>
+      <div class="body">
+        <p>Hi <strong>{{username}}</strong>,</p>
+        <p>
+          Thank you for registering with us. Please verify your email address by
+          clicking the button below.
+        </p>
+        <a href="{{verification_link}}" class="verify-button">Verify Email</a>
+      </div>
+      <div class="footer">
+        <p>If you didn't request this email, please ignore it.</p>
+      </div>
+    </div>
+  </body>
+</html>

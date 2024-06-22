@@ -8,12 +8,18 @@ from app.schemas import auth as auth_schemas
 
 from app.services import user as services
 from app.services import auth as auth_services
+from app.utils.email import generate_verification_token, send_verification_email
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 @router.post('/register/', response_model=schemas.UserResponse)
-def register_user(user: schemas.UserCreate, db:Session = Depends(get_db)):
-    return services.create_user(db, user)
+async def register_user(user: schemas.UserCreate, db:Session = Depends(get_db)):
+    new_user =  services.create_user(db, user)
+
+    token = generate_verification_token(new_user.email)
+    await send_verification_email(new_user.email, token, new_user.username)
+
+    return new_user
 
 @router.post('/login/', response_model=auth_schemas.LoginResponse)
 def login_user(
