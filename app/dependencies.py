@@ -7,22 +7,13 @@ from app.utils.auth.token import decode_jwt
 
 from app.services.user import get_user
 
-from app.config.db import SessionLocal
 from app.config.redis import get_redis_client
-
-from app.constants.envs import envs
+from app.config.db import get_db
 
 ALGORITHM = "HS256"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 def is_token_blacklisted(token: str, redis_client = Depends(get_redis_client)):
     return redis_client.get(token) == 'blacklisted'
