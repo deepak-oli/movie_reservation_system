@@ -1,20 +1,8 @@
 from itsdangerous import URLSafeTimedSerializer
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from fastapi_mail import MessageSchema
 
 from app.constants.envs import envs
-
-conf = ConnectionConfig(
-    MAIL_USERNAME=envs.MAIL_USERNAME,
-    MAIL_PASSWORD=envs.MAIL_PASSWORD,
-    MAIL_FROM=envs.MAIL_FROM,
-    MAIL_PORT=envs.MAIL_PORT,
-    MAIL_SERVER=envs.MAIL_SERVER,
-    USE_CREDENTIALS=True,
-    VALIDATE_CERTS=True,
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=False,
-    TEMPLATE_FOLDER="app/templates"
-)
+from app.config.email import send_email
 
 s = URLSafeTimedSerializer(envs.SECRET_KEY)
 
@@ -44,6 +32,5 @@ async def send_verification_email(email: str, token: str, username: str):
         },
         subtype="html"
     )
-    fm = FastMail(conf)
-    await fm.send_message(message, template_name="verify_user.html")
+    await send_email(message, template_name="verify_user.html")
 

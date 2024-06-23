@@ -9,7 +9,7 @@ from app.schemas import auth as auth_schemas
 
 from app.services import user as services
 from app.services import auth as auth_services
-from app.utils.email import generate_verification_token, send_verification_email
+from app.utils.email.email_verification import generate_verification_token, send_verification_email
 from app.utils.misc.rate_limit import rate_limiter
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -30,12 +30,6 @@ def login_user(
     db:Session = Depends(get_db)
 ):
     return auth_services.login(db, credentials)
-
-@router.get('/me/', response_model=schemas.UserResponse)
-def get_me(
-    user: schemas.AuthUser = Depends(Auth())
-):
-    return user
 
 @router.post('/verify-email/', response_model=schemas.UserResponse)
 async def verify_email(
@@ -72,4 +66,8 @@ def resent_verification_email(
     background_tasks.add_task(send_verification_email, user.email, token, user.username)
     return user
 
-
+@router.get('/me/', response_model=schemas.UserResponse)
+def get_me(
+    user: schemas.AuthUser = Depends(Auth())
+):
+    return user

@@ -27,3 +27,4 @@ def decode_jwt(token: str):
         return decoded_token if exp >= datetime.now(timezone.utc) else None
     except JWTError as e:
         return None
+    

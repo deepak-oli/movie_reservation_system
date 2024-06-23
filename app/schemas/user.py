@@ -33,3 +33,17 @@ class UserResponse(BaseModel):
 
 class AuthUser(UserResponse):
     is_active: bool
+
+
+class PasswordChange(BaseModel):
+    password: str = Field(..., min_length=6, max_length=25)
+    confirm_password: str = Field(..., min_length=6, max_length=25)
+
+    @field_validator('password')
+    def validate_password(cls, v):
+        if not re.match(r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,25}$', v):
+            raise ValueError('Password must be 6-25 chars, with uppercase, special char, letter, and number.')
+        return v
+class ResetPassword(PasswordChange):
+    token: str
+    
