@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    ports:
+      - 8000:8000
+    command: uvicorn app.main:app --host 0.0.0.0 --reload
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres_db
+
+  redis:
+    image: redislabs/redismod
+    ports:
+      - '6380:6379'
+
+  postgres_db:
+    image: postgres:latest
+    user: postgres
+
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
