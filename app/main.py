@@ -36,7 +36,6 @@ async def lifespan(app: FastAPI):
         logger.info("Successfully connected to the database.")
 
     except Exception as e:
-        raise e
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
             detail=e
@@ -51,7 +50,7 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def read_root():
-    return {"status": "Running"}
+    return {"status": "Running v1"}
 
 app.include_router(auth.router)
 app.include_router(user.router)
