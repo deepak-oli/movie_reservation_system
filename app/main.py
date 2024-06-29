@@ -26,7 +26,7 @@ async def lifespan(app: FastAPI):
     except RuntimeError as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
-            detail="Internal Server Error: Unable to connect to Redis."
+            detail=e
         )
     
     # check if the database connection is working
@@ -36,9 +36,10 @@ async def lifespan(app: FastAPI):
         logger.info("Successfully connected to the database.")
 
     except Exception as e:
+        raise e
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
-            detail="Internal Server Error: Unable to connect to the database."
+            detail=e
         )
     finally:
         db.close()
@@ -58,4 +59,4 @@ app.include_router(user.router)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, debug=True)
