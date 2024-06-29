@@ -21,6 +21,12 @@ def verify_user(db:Session, credentials:auth_schemas.Login):
 def login(db:Session, credentials:auth_schemas.Login):
     user = verify_user(db, credentials)
 
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User is not active.")
+    
+    if not user.is_verified:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User is not verified.")
+
      # Check if the token is already cached in Redis
     cached_token = redis_client.get(f"user_token:{user.id}")
 

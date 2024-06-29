@@ -1,24 +1,38 @@
 import re
-from pydantic import BaseModel, EmailStr, Field, field_validator, ValidationError
+from pydantic import BaseModel, EmailStr, Field, field_validator
+from app.models.user import Role
+
+# Common password validation logic
+def validate_password(value: str) -> str:
+    pattern = r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,25}$'
+    if not re.match(pattern, value):
+        raise ValueError('Password must be 6-25 characters long, include an uppercase letter, a special character, a letter, and a number.')
+    return value
+
+# Common username validation logic
+def validate_username(value: str) -> str:
+    if not 3 <= len(value) <= 25:
+        raise ValueError('Username must be between 3 and 25 characters.')
+    if not re.match(r'^[a-zA-Z_]', value):
+        raise ValueError('Username must start with a letter or an underscore.')
+    if not re.search(r'[a-zA-Z]', value):
+        raise ValueError('Username must contain at least one letter.')
+    if not re.match(r'^[a-zA-Z0-9_]+$', value):
+        raise ValueError('Username can only contain letters, numbers, and underscores.')
+    return value
+
 class UserCreate(BaseModel):
     username: str = Field(..., min_length=3, max_length=25)
     email: EmailStr
     password: str = Field(..., min_length=6, max_length=25)
 
     @field_validator('username')
-    def validate_username(cls, v):
-        if not 3 <= len(v) <= 25:
-            raise ValueError('Username must be 3-25 chars.')
-        if not re.match(r'^[a-zA-Z_]', v):
-            raise ValueError('Username must start with an alphabet or an underscore.')
-        if not re.search(r'[a-zA-Z]', v):
-            raise ValueError('Username must contain at least one letter')
-        if not re.match(r'^[a-zA-Z0-9_]+$', v):
-            raise ValueError('Username must contain only letters, numbers, and underscores.')
-        return v
+    def validate_username_field(cls, v):
+        return validate_username(v)
     
     @field_validator('password')
-    def validate_password(cls, v):
+    def validate_password_field(cls, v):
+        return validate_password(v)
         if not re.match(r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,25}$', v):
             raise ValueError('Password must be 6-25 chars, with uppercase, special char, letter, and number.')
         return v
@@ -36,14 +50,31 @@ class AuthUser(UserResponse):
 
 
 class PasswordChange(BaseModel):
-    password: str = Field(..., min_length=6, max_length=25)
-    confirm_password: str = Field(..., min_length=6, max_length=25)
+    new_password: str = Field(..., min_length=6, max_length=25)
+    confirm_new_password: str = Field(..., min_length=6, max_length=25)
 
-    @field_validator('password')
+    @field_validator('new_password')
     def validate_password(cls, v):
-        if not re.match(r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,25}$', v):
-            raise ValueError('Password must be 6-25 chars, with uppercase, special char, letter, and number.')
-        return v
+        return validate_password(v)
+    
+class ChangePasswordRequest(PasswordChange):
+    old_password: str = Field(..., min_length=6, max_length=25)
+
+    @field_validator('old_password')
+    def validate_old_password(cls, v):
+        return validate_password(v)
+    
 class ResetPassword(PasswordChange):
     token: str
+
+class UserUpdate(BaseModel):
+    username: str = None
+    email: EmailStr = None
+
+    @field_validator('username', mode="before")
+    def validate_username_field(cls, v):
+        if v is None:
+            return v
+        return validate_username(v)
     
+        
