@@ -1,0 +1,16 @@
+# Exclude files and directories
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+.env
+.venv
+.vscode
+.idea
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
