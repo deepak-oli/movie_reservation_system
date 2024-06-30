@@ -71,3 +71,8 @@ def get_me(
     user: schemas.AuthUser = Depends(Auth())
 ):
     return user
+
+# TOOD
+# social login
+# 2FA
+# refresh token

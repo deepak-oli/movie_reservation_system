@@ -172,3 +172,13 @@ def update_profile(db:Session, user_id:int, payload:schemas.UserUpdate, backgrou
         background_tasks.add_task(send_verification_email, user.email, token, user.username)
 
     return user
+
+def delete_user(db:Session, user_id:int):
+    user = get_user(db, user_id)
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
+    
+    db.delete(user)
+    db.commit()
+    return user
