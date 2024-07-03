@@ -46,9 +46,9 @@ def change_password(payload:ChangePasswordRequest, user: AuthUser = Depends(Auth
 @router.delete('/delete')
 def delete_user(user: AuthUser = Depends(Auth()), db:Session = Depends(get_db)):
     services.delete_user(db, user.id)
-    return {
+    return JSONResponse({
         "detail": "User deleted successfully."
-    }
+    })
 
 #  TODO   
 # lock/unlock user

@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException, status
 from sqlalchemy import text
 
 
-from app.routers import auth, user
+from app.routers import auth, user, actor
 
 from app.config.redis import get_redis_client
 from app.dependencies import get_db
@@ -54,6 +54,7 @@ def read_root():
 
 app.include_router(auth.router)
 app.include_router(user.router)
+app.include_router(actor.router)
 
 
 if __name__ == "__main__":
