@@ -25,8 +25,6 @@ if config.config_file_name is not None:
 from app.config.db import Base
 from app.models import (
     user,
-    actor,
-    movie
 )
 
 target_metadata = Base.metadata
