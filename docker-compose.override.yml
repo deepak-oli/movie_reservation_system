@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      args:
+        INSTALL_DEBUGPY: "true"
+
+    command: uvicorn app.main:app --host 0.0.0.0 --reload --log-level debug
+
+    ports:
+      - 8000:8000
+      - 5678:5678
+
+    environment:
+      - DEBUG=true

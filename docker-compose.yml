@@ -1,11 +1,8 @@
 services:
   app:
-    command: uvicorn app.main:app --host 0.0.0.0 --reload
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - 8000:8000
     volumes:
       - .:/code
     env_file:

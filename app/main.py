@@ -1,14 +1,8 @@
 import logging
-from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, status
-from sqlalchemy import text
+import os 
 
-
+from fastapi import FastAPI
 from app.routers import include_routers
-
-from app.config.redis import get_redis_client
-from app.dependencies import get_db
-
 
 # Disable passlib logging
 logging.getLogger('passlib').setLevel(logging.ERROR)
@@ -17,35 +11,8 @@ logging.getLogger('passlib').setLevel(logging.ERROR)
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # check if the Redis server is running
-    try:
-        _ = get_redis_client()
-        logger.info("Successfully connected to Redis.")
-    except RuntimeError as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
-            detail=e
-        )
-    
-    # check if the database connection is working
-    db = next(get_db())
-    try:
-        db.execute(text("SELECT 1"))
-        logger.info("Successfully connected to the database.")
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
-            detail=e
-        )
-    finally:
-        db.close()
-    yield
-    # Clean up code here
-
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 
 @app.get("/")
@@ -55,6 +22,15 @@ def read_root():
 # add all routers
 include_routers(app)
 
+
+
+DEBUG_MODE = os.getenv("DEBUG", "false").lower() == "true"
+
+if DEBUG_MODE:
+    import debugpy
+    debugpy.listen(("0.0.0.0", 5678))
+    logger.info("Debug mode enabled")
+    
 
 if __name__ == "__main__":
     import uvicorn
