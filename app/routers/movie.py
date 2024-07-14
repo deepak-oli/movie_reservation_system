@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from fastapi.responses import JSONResponse
 
 from app.dependencies import Auth, get_db
 from app.services import movie as services
@@ -22,4 +23,13 @@ def get_movie(movie_id:int, db: Session = Depends(get_db)):
 @router.post("/", response_model=schemas.Movie)
 def create_movie(movie: schemas.MovieCreate, db: Session = Depends(get_db)):
     return services.create_movie(db, movie)
+
+@router.put("/{movie_id}", response_model=schemas.Movie)
+def update_movie(movie_id:int, movie: schemas.MovieCreate, db: Session = Depends(get_db)):
+    return services.update_movie(db, movie_id, movie)
+
+@router.delete("/{movie_id}", response_model=schemas.Movie)
+def delete_movie(movie_id:int, db: Session = Depends(get_db)):
+    services.delete_movie(db, movie_id)
+    return JSONResponse({"detail": "Movie deleted successfully."})
 

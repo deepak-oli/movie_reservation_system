@@ -13,7 +13,7 @@ class MovieCreate(MovieBase):
 
 class Movie(MovieBase):
     id: int
-    # actors:  Actor
+    actors:  list[Actor]
 
     class Config:
         from_attributes = True
