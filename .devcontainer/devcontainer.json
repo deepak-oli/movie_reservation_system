@@ -1,0 +1,24 @@
+{
+    "name": "Python Dev Container",
+    "context": "..",
+    "dockerFile": "../Dockerfile",
+    "runArgs": ["--init", "--network=host"],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.pythonPath": "/usr/local/bin/python"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    },
+    "postCreateCommand": "pip install --no-cache-dir -r requirements.txt",
+    "workspaceFolder": "/code",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/code,type=bind",
+    "remoteEnv": {
+        "PYTHONPATH": "/code"
+    }
+}
+  
