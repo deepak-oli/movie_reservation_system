@@ -24,4 +24,7 @@ class Envs:
 
     FRONTEND_URL:str = os.getenv("FRONTEND_URL","")
 
+    TMDB_API_KEY:str = os.getenv("TMDB_API_KEY","")
+    TMDB_API_BASE_URL:str = os.getenv("TMDB_API_BASE_URL","https://api.themoviedb.org/3")
+
 envs = Envs()

@@ -1,7 +1,7 @@
 from importlib import import_module
 from fastapi import FastAPI
 
-router_module_names = ['auth', 'user']
+router_module_names = ['auth', 'user', 'movie']
 
 def include_routers(app: FastAPI):
     for router_module_name in router_module_names:
