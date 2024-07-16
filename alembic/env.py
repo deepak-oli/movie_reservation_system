@@ -24,7 +24,7 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 from app.config.db import Base
 from app.models import (
-    user,
+    user, notification, payment, seat, show, theater, ticket
 )
 
 target_metadata = Base.metadata
