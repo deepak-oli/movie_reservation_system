@@ -6,9 +6,9 @@ from .base_model import BaseModel
 class Theater(BaseModel):
     __tablename__ = "theaters"
 
-    name = Column(String, unique=True, index=True, nullable=False)
+    name = Column(String, index=True, nullable=False)
     location = Column(String, nullable=False)
-    image = Column(String)
+    image = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     capacity = Column(Integer, nullable=False)
     screens = Column(Integer, nullable=False, default=1)

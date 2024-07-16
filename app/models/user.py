@@ -19,7 +19,3 @@ class User(BaseModel):
     image = Column(String)
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
-
-    tickets = relationship("Ticket", back_populates="user")
-    payments = relationship("Payment", back_populates="user")
-    notifications = relationship("Notification", back_populates="user")

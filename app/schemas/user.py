@@ -1,6 +1,5 @@
 import re
 from pydantic import BaseModel, EmailStr, Field, field_validator
-from app.models.user import Role
 
 # Common password validation logic
 def validate_password(value: str) -> str:
@@ -33,9 +32,6 @@ class UserCreate(BaseModel):
     @field_validator('password')
     def validate_password_field(cls, v):
         return validate_password(v)
-        if not re.match(r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,25}$', v):
-            raise ValueError('Password must be 6-25 chars, with uppercase, special char, letter, and number.')
-        return v
 
 class UserResponse(BaseModel):
     id: int

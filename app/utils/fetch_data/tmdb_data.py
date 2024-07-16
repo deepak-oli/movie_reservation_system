@@ -17,12 +17,15 @@ def fetch_TMDB_data(url: str, params: dict = None):
     """
     Fetches data from TMDB API with optional parameters.
     """
-    params = params or {}
-    params = {**params, "api_key": envs.TMDB_API_KEY}
-    # Implement your fetch_data logic here
-    # Example:
-    response = requests.get(url, params=params)
-    return response.json()
+    try:
+        params = params or {}
+        params = {**params, "api_key": envs.TMDB_API_KEY}
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print("TMDB ERROR:", str(e))
+        raise HTTPException(status_code=500, detail='Error occured while fetching data.')
 
 def fetch_cached_data(cache_key: str, url: str, params: dict = None):
     """

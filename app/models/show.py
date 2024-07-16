@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey, Date, Time
+from sqlalchemy import Column, Integer, ForeignKey, Date, Time, Boolean
 from sqlalchemy.orm import relationship
 
 from .base_model import BaseModel
@@ -12,7 +12,6 @@ class Show(BaseModel):
     end_time = Column(Time, nullable=False)
     date = Column(Date, nullable=False)
     price = Column(Integer, nullable=False)
-    is_active = Column(Integer, default=True)
+    is_active = Column(Boolean, default=True)
 
     theater = relationship("Theater", back_populates="shows")
-    tickets = relationship("Ticket", back_populates="show")

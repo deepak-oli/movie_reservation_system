@@ -12,7 +12,5 @@ class Ticket(BaseModel):
     price = Column(Integer, nullable=False)
     status = Column(Integer, nullable=False)
 
-    show = relationship("Show", back_populates="tickets")
-    user = relationship("User", back_populates="tickets")
     seat = relationship("Seat", back_populates="tickets")
     payments = relationship("Payment", back_populates="ticket")
