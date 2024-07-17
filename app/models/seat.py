@@ -14,3 +14,4 @@ class Seat(BaseModel):
     theater_id = Column(Integer, ForeignKey("theaters.id"), nullable=False)
 
     theater = relationship("Theater", back_populates="seats")
+    tickets = relationship("Ticket", back_populates="seat")

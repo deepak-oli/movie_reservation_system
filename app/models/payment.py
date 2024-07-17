@@ -26,5 +26,5 @@ class Payment(BaseModel):
     status = Column(Enum(PaymentStatus), nullable=False)
     date = Column(DateTime, nullable=False)
 
-    ticket = relationship("Ticket", back_populates="payments")
+    # ticket = relationship("Ticket", back_populates="payments")
     user = relationship("User", back_populates="payments")
